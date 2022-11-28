@@ -17,6 +17,7 @@ class Arene:
                     où emplacement est un tuple de coordonnées (x,y) et dé est une istance de la classe Dé.
         mode_affichage (int): Le mode d'affichage (1 pour [X,2,3,4,5,6] ou 2 pour [X,⚁,⚂,⚃,⚄,⚅])
     """
+
     def __init__(self, dimension, de_initial, mode_affichage):
         """
         Constructeur de la classe Arene.
@@ -46,8 +47,10 @@ class Arene:
         Returns:
             bool: True si l'emplacement est dans l'arène, False sinon
         """
+        dans_arene = True if (emplacement[0] and emplacement[1]) >=0 and (emplacement[0] and emplacement[1]) <= self.dimension-1 else False
+        return dans_arene
         # VOTRE CODE ICI
-
+        
     def effectuer_lancer(self, lancer):
         """
         Obtient la trajectoire du lancer (Lancer.trajectoire), relance les
@@ -58,6 +61,10 @@ class Arene:
         Args:
             lancer (Lancer): contient les informations sur le lancer à effectuer
         """
+        # for trajectoire in lancer.trajectoire[::-1]:
+        #     self.relancer_des_accroches(trajectoire)
+        self.relancer_des_accroches(lancer.trajectoire[:-1])
+        self.placer_nouveau_de(lancer.de, lancer.trajectoire[-1])
         # VOTRE CODE ICI
 
     def relancer_des_accroches(self, trajectoire):
@@ -68,6 +75,8 @@ class Arene:
         Args:
             trajectoire (list): Liste des coordonnées où l'on doit relancer
         """
+        for point in trajectoire:
+            self.des[point].lancer()
         # VOTRE CODE ICI
 
     def placer_nouveau_de(self, de, emplacement_final):
@@ -83,6 +92,8 @@ class Arene:
             de (De): Le dé à ajouter
             emplacement_final ((int, int)): Les coordonnées où ajouter le dé
         """
+        if self.dans_arene(emplacement_final):
+            self.des[emplacement_final] = de
         # VOTRE CODE ICI
 
     def effectuer_plusieurs_lancers(self, liste_lancers):
@@ -92,6 +103,8 @@ class Arene:
         Args:
             liste_lancers (list): La liste de lancers à effectuer
         """
+        for lancer in liste_lancers:
+            self.effectuer_lancer(lancer)
         # VOTRE CODE ICI
 
     def rangement(self, joueur_en_cours):
@@ -109,6 +122,7 @@ class Arene:
         Returns:
             bool: True si une correspondance a eu lieu, False sinon.
         """
+
         # VOTRE CODE ICI
 
     def retirer_les_x(self):

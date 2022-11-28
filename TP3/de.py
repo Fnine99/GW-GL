@@ -32,8 +32,12 @@ class De:
         Returns:
             str: La représentation de la valeur du dé.
         """
+        if mode==1: self.affichage='[2,3,4,5,6]'
+        if mode==2: self.affichage='[⚁,⚂,⚃,⚄,⚅]'
         # VOTRE CODE ICI
-
+        # error handling? : quand on va demander pour le mode
+        
+        
     def lancer(self):
         """
         Modifie aléatoirement la valeur du dé.

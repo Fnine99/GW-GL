@@ -44,6 +44,8 @@ class Joueur:
         Returns:
             Lancer: Le lancer créé
         """
+        self.des.pop()
+        return Lancer(coordonnees, angle, puissance)
         # VOTRE CODE ICI
 
     def choisir_lancer(self):
@@ -98,6 +100,9 @@ class Joueur:
         Returns:
             bool: True si l'entrée est L, False si T (None si invalide)
         """
+        if entree.lower()=='l': return True
+        if entree.lower()=='t': return False
+        return None
         # VOTRE CODE ICI
 
     def traitement_coordonnees(self, entree):
@@ -120,6 +125,13 @@ class Joueur:
         Returns:
             tuple: Coordonnées traitées (None si invalide)
         """
+        coordonnnees = ()
+        if len(entree.strip(' '))>3: return None
+        for point in entree.split(','):
+            if not point.isnumeric(): return None   
+            coordonnnees.append(point)
+        if self.arene.dans_arene(coordonnnees): return coordonnnees
+        return None
         # VOTRE CODE ICI
 
     def traitement_angle(self, entree):
@@ -138,6 +150,8 @@ class Joueur:
         Returns:
             str: Le point cardinal, en majuscule (None si invalide)
         """
+        if entree.upper() in ANGLES.keys(): return entree.upper()
+        return None
         # VOTRE CODE ICI
 
     def traitement_puissance(self, entree):
@@ -154,6 +168,8 @@ class Joueur:
         Returns:
             int: L'entier représenté par l'entrée (None si invalide)
         """
+        if entree.isnumeric() and entree>=1 and entree<=self.arene.dimesion: return int(entree)
+        return None
         # VOTRE CODE ICI
 
     def choisir_continuer(self):
@@ -241,6 +257,8 @@ class Joueur:
         Returns:
             bool: True si le joueur est éliminé, False sinon.
         """
+        if len(self.des)>0: return True
+        return False
         # VOTRE CODE ICI
 
     def rendre_de(self, de):
@@ -251,6 +269,8 @@ class Joueur:
         Args:
             de (De): Le dé à ajouter
         """
+        de.ranger()
+        self.des.append(de)
         # VOTRE CODE ICI
 
     def table_rase(self):
@@ -262,6 +282,8 @@ class Joueur:
         Returns:
             liste: La liste des lancers
         """
+        lancers = [Joueur.creer_lancer(self.piger_coordonnees, self.piger_angle, self.piger_puissance) for x in range(len(self.des))]
+        return lancers 
         # VOTRE CODE ICI
 
     def __str__(self):
