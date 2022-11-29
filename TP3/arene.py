@@ -61,9 +61,8 @@ class Arene:
         Args:
             lancer (Lancer): contient les informations sur le lancer à effectuer
         """
-        # for trajectoire in lancer.trajectoire[::-1]:
-        #     self.relancer_des_accroches(trajectoire)
         self.relancer_des_accroches(lancer.trajectoire[:-1])
+        print(lancer.de.valeur)
         self.placer_nouveau_de(lancer.de, lancer.trajectoire[-1])
         # VOTRE CODE ICI
 
@@ -76,7 +75,7 @@ class Arene:
             trajectoire (list): Liste des coordonnées où l'on doit relancer
         """
         for point in trajectoire:
-            self.des[point].lancer()
+            if point in self.des.keys(): self.des[point].lancer()
         # VOTRE CODE ICI
 
     def placer_nouveau_de(self, de, emplacement_final):
@@ -122,8 +121,12 @@ class Arene:
         Returns:
             bool: True si une correspondance a eu lieu, False sinon.
         """
-
+        self.retirer_les_x()
+        compte = self.compter_valeurs()
+        self.retirer_correspondances(compte, joueur_en_cours)
+        return self.correspondance_existe(compte, joueur_en_cours)
         # VOTRE CODE ICI
+        # Methode tres bizarre
 
     def retirer_les_x(self):
         """
@@ -134,6 +137,11 @@ class Arene:
         dans une liste, puis retirez-les dans un deuxième temps, car faire des suppressions
         dans un dictionnaire en même temps que l'on itère dessus est déconseillé.
         """
+        des_a_retirer = []
+        for index, de in list(self.des.values()):
+            if de==1: des_a_retirer.append(list(self.des.keys())[index])
+        for emplacement in des_a_retirer:
+            self.retirer_de(emplacement)
         # VOTRE CODE ICI
 
     def compter_valeurs(self):
@@ -147,6 +155,11 @@ class Arene:
         Returns:
             dict: Le dictionnaire associant valeurs de dés et nombre d'occurence
         """
+        occurence_des = {2:0, 3:0, 4:0, 5:0, 6:0}
+        for de in self.des.values():
+            occurence_des[de]+=1
+            # if de in occurence_des.keys(): occurence_des[de]+=1
+        return occurence_des
         # VOTRE CODE ICI
 
     def retirer_correspondances(self, comptes, joueur_en_cours):
@@ -163,6 +176,11 @@ class Arene:
             joueur_en_cours (Joueur): le joueur à qui rendre les dés
 
         """
+        des_a_rendre = []
+        for emplacement, de in self.des.items():
+            if comptes[de]>1: des_a_rendre.append(emplacement)
+        for de in des_a_rendre:
+            self.rendre_au_joueur(de, joueur_en_cours)
         # VOTRE CODE ICI
 
     def correspondance_existe(self, comptes):
@@ -175,7 +193,10 @@ class Arene:
 
         Returns:
             bool: True si une valeur de dé est là plus d'une fois, False sinon.
-        """
+        # """
+        for de in comptes.values():
+            if de>1: return True
+        return False
         # VOTRE CODE ICI
 
     def est_vide(self):
@@ -185,6 +206,7 @@ class Arene:
         Returns:
             bool: True si aucun dé n'est présent, False sinon.
         """
+        return len(self.des)<1
         # VOTRE CODE ICI
 
     def retirer_de(self, emplacement):
@@ -194,6 +216,7 @@ class Arene:
         Args:
             emplacement ((int, int)): L'emplacement du dé à éliminer.
         """
+        del self.des[emplacement]
         # VOTRE CODE ICI
 
     def rendre_au_joueur(self, emplacement, joueur):
@@ -205,6 +228,8 @@ class Arene:
             emplacement ((int, int)): L'emplacement du dé à rendre
             joueur (Joueur): Le joueur à qui rendre le dé
         """
+        joueur.rendre_de(emplacement)
+        self.retirer_de(emplacement)
         # VOTRE CODE ICI
 
     def afficher_de(self, emplacement):

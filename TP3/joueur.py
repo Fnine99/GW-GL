@@ -44,8 +44,10 @@ class Joueur:
         Returns:
             Lancer: Le lancer créé
         """
-        self.des.pop()
-        return Lancer(coordonnees, angle, puissance)
+        
+        lancer = Lancer(self.des[0],coordonnees, angle, puissance)
+        self.des.pop(0)
+        return lancer
         # VOTRE CODE ICI
 
     def choisir_lancer(self):
@@ -125,13 +127,9 @@ class Joueur:
         Returns:
             tuple: Coordonnées traitées (None si invalide)
         """
-        coordonnnees = ()
-        if len(entree.strip(' '))>3: return None
-        for point in entree.split(','):
-            if not point.isnumeric(): return None   
-            coordonnnees.append(point)
-        if self.arene.dans_arene(coordonnnees): return coordonnnees
-        return None
+        coordonnees = tuple(int(point) for point in entree.split(','))
+        if len(entree.split(','))>2 or not self.arene.dans_arene(coordonnees): return None
+        return coordonnees
         # VOTRE CODE ICI
 
     def traitement_angle(self, entree):
@@ -168,7 +166,7 @@ class Joueur:
         Returns:
             int: L'entier représenté par l'entrée (None si invalide)
         """
-        if entree.isnumeric() and entree>=1 and entree<=self.arene.dimesion: return int(entree)
+        if entree.isnumeric() and int(entree)>=1 and int(entree)<=self.arene.dimension: return int(entree)
         return None
         # VOTRE CODE ICI
 
@@ -257,7 +255,7 @@ class Joueur:
         Returns:
             bool: True si le joueur est éliminé, False sinon.
         """
-        if len(self.des)>0: return True
+        if len(self.des)<1: return True
         return False
         # VOTRE CODE ICI
 
