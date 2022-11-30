@@ -35,7 +35,7 @@ class Arene:
         self.des = {(self.dimension // 2, self.dimension // 2): de_initial}
         self.mode_affichage = mode_affichage
 
-    def dans_arene(self, emplacement):
+    def dans_arene(self, emplacement): 
         """
         Vérifie si un emplacement est inclus dans l'arène.
         Un emplacement (x, y) est dans l'arène s'il se trouve entre (0,0)
@@ -46,9 +46,8 @@ class Arene:
 
         Returns:
             bool: True si l'emplacement est dans l'arène, False sinon
-        """
-        dans_arene = True if (emplacement[0] and emplacement[1]) >=0 and (emplacement[0] and emplacement[1]) <= self.dimension-1 else False
-        return dans_arene
+        """ 
+        return 0<=emplacement[0]<=(self.dimension-1) and 0<=emplacement[1]<=(self.dimension-1)
         # VOTRE CODE ICI
         
     def effectuer_lancer(self, lancer):
@@ -62,7 +61,6 @@ class Arene:
             lancer (Lancer): contient les informations sur le lancer à effectuer
         """
         self.relancer_des_accroches(lancer.trajectoire[:-1])
-        print(lancer.de.valeur)
         self.placer_nouveau_de(lancer.de, lancer.trajectoire[-1])
         # VOTRE CODE ICI
 
@@ -91,8 +89,7 @@ class Arene:
             de (De): Le dé à ajouter
             emplacement_final ((int, int)): Les coordonnées où ajouter le dé
         """
-        if self.dans_arene(emplacement_final):
-            self.des[emplacement_final] = de
+        if self.dans_arene(emplacement_final): self.des[emplacement_final] = de
         # VOTRE CODE ICI
 
     def effectuer_plusieurs_lancers(self, liste_lancers):
@@ -102,8 +99,7 @@ class Arene:
         Args:
             liste_lancers (list): La liste de lancers à effectuer
         """
-        for lancer in liste_lancers:
-            self.effectuer_lancer(lancer)
+        for lancer in liste_lancers: self.effectuer_lancer(lancer)
         # VOTRE CODE ICI
 
     def rangement(self, joueur_en_cours):
@@ -122,11 +118,10 @@ class Arene:
             bool: True si une correspondance a eu lieu, False sinon.
         """
         self.retirer_les_x()
-        compte = self.compter_valeurs()
-        self.retirer_correspondances(compte, joueur_en_cours)
-        return self.correspondance_existe(compte, joueur_en_cours)
+        comptes = self.compter_valeurs()
+        self.retirer_correspondances(comptes, joueur_en_cours)
+        return self.correspondance_existe(comptes)
         # VOTRE CODE ICI
-        # Methode tres bizarre
 
     def retirer_les_x(self):
         """
@@ -138,8 +133,8 @@ class Arene:
         dans un dictionnaire en même temps que l'on itère dessus est déconseillé.
         """
         des_a_retirer = []
-        for index, de in list(self.des.values()):
-            if de==1: des_a_retirer.append(list(self.des.keys())[index])
+        for index, de in enumerate(list(self.des.values())):
+            if de.valeur==1: des_a_retirer.append(list(self.des.keys())[index])
         for emplacement in des_a_retirer:
             self.retirer_de(emplacement)
         # VOTRE CODE ICI
@@ -157,8 +152,7 @@ class Arene:
         """
         occurence_des = {2:0, 3:0, 4:0, 5:0, 6:0}
         for de in self.des.values():
-            occurence_des[de]+=1
-            # if de in occurence_des.keys(): occurence_des[de]+=1
+            occurence_des[de.valeur]+=1
         return occurence_des
         # VOTRE CODE ICI
 
@@ -178,7 +172,7 @@ class Arene:
         """
         des_a_rendre = []
         for emplacement, de in self.des.items():
-            if comptes[de]>1: des_a_rendre.append(emplacement)
+            if comptes[de.valeur]>1: des_a_rendre.append(emplacement)
         for de in des_a_rendre:
             self.rendre_au_joueur(de, joueur_en_cours)
         # VOTRE CODE ICI
@@ -228,7 +222,7 @@ class Arene:
             emplacement ((int, int)): L'emplacement du dé à rendre
             joueur (Joueur): Le joueur à qui rendre le dé
         """
-        joueur.rendre_de(emplacement)
+        joueur.rendre_de(self.des[emplacement])
         self.retirer_de(emplacement)
         # VOTRE CODE ICI
 

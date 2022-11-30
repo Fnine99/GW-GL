@@ -19,7 +19,6 @@ ANGLES = {
     'O': (0, -1)
 }
 
-
 class Lancer:
     """ Représente un lancer de dé.
 
@@ -72,7 +71,6 @@ class Lancer:
 
         Returns:
             (int, int): Le déplacement en x et en y
-
         """
         direction_base = ANGLES[angle]
         return self.deviation(direction_base)

@@ -44,8 +44,8 @@ class Joueur:
         Returns:
             Lancer: Le lancer créé
         """
-        
-        lancer = Lancer(self.des[0],coordonnees, angle, puissance)
+        self.des[0].lancer()
+        lancer = Lancer(self.des[0], coordonnees, angle, puissance)
         self.des.pop(0)
         return lancer
         # VOTRE CODE ICI
@@ -70,8 +70,7 @@ class Joueur:
         Returns:
             (int, int): Le centre de l'arène
         """
-        return randint(0, self.arene.dimension - 1), \
-               randint(0, self.arene.dimension - 1)
+        return randint(0, self.arene.dimension - 1),randint(0, self.arene.dimension - 1)
 
     def piger_angle(self):
         """
@@ -127,9 +126,12 @@ class Joueur:
         Returns:
             tuple: Coordonnées traitées (None si invalide)
         """
-        coordonnees = tuple(int(point) for point in entree.split(','))
-        if len(entree.split(','))>2 or not self.arene.dans_arene(coordonnees): return None
-        return coordonnees
+        try:
+            coordonnees = tuple(int(point) for point in entree.split(','))
+            if len(entree.split(','))==2 and self.arene.dans_arene(coordonnees): return coordonnees
+            return None
+        except ValueError:
+            return None
         # VOTRE CODE ICI
 
     def traitement_angle(self, entree):
@@ -280,8 +282,7 @@ class Joueur:
         Returns:
             liste: La liste des lancers
         """
-        lancers = [Joueur.creer_lancer(self.piger_coordonnees, self.piger_angle, self.piger_puissance) for x in range(len(self.des))]
-        return lancers 
+        return  [self.creer_lancer(self.piger_coordonnees(), self.piger_angle(), self.piger_puissance()) for x in self.des]
         # VOTRE CODE ICI
 
     def __str__(self):
